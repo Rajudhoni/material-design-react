@@ -14,6 +14,7 @@ import MenuItem from "@material-ui/core/MenuItem";
 import useMediaQuery from '@material-ui/core/useMediaQuery';
 import {useTheme} from "@material-ui/core/styles";
 import SwipeableDrawer from '@material-ui/core/SwipeableDrawer';
+import IconButton from "@material-ui/core/IconButton";
 import MenuIcon  from '@material-ui/icons/Menu';
 
 
@@ -85,6 +86,16 @@ const useStyles = makeStyles((theme) => ({
     },
     ...theme.typography.tab,
   },
+  drawerIconContainer: {
+    marginLeft: "auto", 
+    "&:hover": {
+      backgroundColor: "transparent"
+    }
+  }, 
+  drawerIcon: {
+    width: "50px", 
+    height: "50px"
+  }
 }));
 
 const Header = () => {
@@ -269,7 +280,19 @@ const Header = () => {
               ))}
             </Menu>
     </React.Fragment>
-  )
+  );
+   const drawer = (
+     <React.Fragment>
+       <SwipeableDrawer disableBackdropTransition={!iOS} disableDiscovery={iOS}
+                    open={openDrawer} onClose={()=> setOpenDrawer(false)} 
+                    onOpen={() => setOpenDrawer(true)} >
+                        Example Drawer
+                    </SwipeableDrawer>
+                    <IconButton className={classes.drawerIconContainer} onClick={() => setOpenDrawer(!openDrawer)} disableRipple>
+                      <MenuIcon className={classes.drawerIcon}/>
+                    </IconButton>
+     </React.Fragment>
+   )
   return (
     <React.Fragment>
       <ElevationScroll>
@@ -284,7 +307,7 @@ const Header = () => {
             >
               <img alt="logo" src={logo} className={classes.logo} />
             </Button>
-            {matches ? null : tabs}
+            {matches ? drawer : tabs}
             
           </Toolbar>
         </AppBar>
