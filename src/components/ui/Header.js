@@ -11,6 +11,13 @@ import Button from "@material-ui/core/Button";
 import { Link } from "react-router-dom";
 import Menu from "@material-ui/core/Menu";
 import MenuItem from "@material-ui/core/MenuItem";
+import useMediaQuery from '@material-ui/core/useMediaQuery';
+import {useTheme} from "@material-ui/core/styles";
+import SwipeableDrawer from '@material-ui/core/SwipeableDrawer';
+import MenuIcon  from '@material-ui/icons/Menu';
+
+
+
 
 function ElevationScroll(props) {
   const { children } = props;
@@ -29,9 +36,21 @@ const useStyles = makeStyles((theme) => ({
   toolbarMargin: {
     ...theme.mixins.toolbar,
     marginBottom: "3em",
+    [theme.breakpoints.down("md")]:{
+      marginBottom: "2em"
+    }, 
+    [theme.breakpoints.down("xs")]: {
+      marginBottom: "1.25em"
+    }
   },
   logo: {
     height: "8em",
+    [theme.breakpoints.down("md")]:{
+      height: "7em" 
+    },
+    [theme.breakpoints.down("xs")]: {
+      height: "5.5em"
+    }
   },
   logoContainer: {
     padding: 0,
@@ -71,8 +90,12 @@ const useStyles = makeStyles((theme) => ({
 const Header = () => {
   const [Value, setValue] = useState(0);
   const classes = useStyles();
+  const theme = useTheme();
+  const iOS = process.browser && /iPad|iPhone|iPod/.test(navigator.userAgent);
+  const matches = useMediaQuery(theme.breakpoints.down("md"));
+  const [openDrawer, setOpenDrawer] = useState(false);
   const [anchorEl, setAnchorEl] = useState(null);
-  const [open, setOpen] = useState(false);
+  const [openMenu, setOpenMenu] = useState(false);
   const [selectedIndex, setSelectedIndex] = useState(0);
 
   const handleChange = (e, value) => {
@@ -82,16 +105,16 @@ const Header = () => {
   const handleClick = (e) => {
     console.log(e.currentTarget);
     setAnchorEl(e.currentTarget);
-    setOpen(true);
+    setOpenMenu(true);
   };
 
   const handleClose = (e) => {
     setAnchorEl(null);
-    setOpen(false);
+    setOpenMenu(false);
   };
   const handleMenuItemClick = (e, i) => {
     setAnchorEl(null);
-    setOpen(false);
+    setOpenMenu(false);
     setSelectedIndex(i);
   };
 
@@ -166,21 +189,10 @@ const Header = () => {
         break;
     }
   });
-  return (
+
+  const tabs = (
     <React.Fragment>
-      <ElevationScroll>
-        <AppBar position="fixed" color="primary">
-          <Toolbar disableGutters>
-            <Button
-              component={Link}
-              to="/"
-              className={classes.logoContainer}
-              onClick={() => setValue(0)}
-              disableRipple
-            >
-              <img alt="logo" src={logo} className={classes.logo} />
-            </Button>
-            <Tabs
+                  <Tabs
               value={Value}
               className={classes.tabsContainer}
               onChange={handleChange}
@@ -233,7 +245,7 @@ const Header = () => {
             <Menu
               id="simple-menu"
               anchorEl={anchorEl}
-              open={open}
+              open={openMenu}
               onClose={handleClose}
               classes={{ paper: classes.menu }}
               MenuListProps={{ onMouseLeave: handleClose }}
@@ -256,6 +268,24 @@ const Header = () => {
                 </MenuItem>
               ))}
             </Menu>
+    </React.Fragment>
+  )
+  return (
+    <React.Fragment>
+      <ElevationScroll>
+        <AppBar position="fixed" color="primary">
+          <Toolbar disableGutters>
+            <Button
+              component={Link}
+              to="/"
+              className={classes.logoContainer}
+              onClick={() => setValue(0)}
+              disableRipple
+            >
+              <img alt="logo" src={logo} className={classes.logo} />
+            </Button>
+            {matches ? null : tabs}
+            
           </Toolbar>
         </AppBar>
       </ElevationScroll>
