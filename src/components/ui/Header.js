@@ -110,6 +110,9 @@ const useStyles = makeStyles((theme) => ({
   }, 
   drawerItemSelected: {
     opacity: 1
+  }, 
+  appbar: {
+    zIndex: theme.zIndex.modal + 1 
   }
 }));
 
@@ -151,20 +154,25 @@ const Header = () => {
     { name: "Website Development", link: "/websites" },
   ];
 
+  const routes = [{name: "Home", link: "/"}, {name: "The Revolution", link: "/revolution"},
+                  {name: "About Us", link: "/about"}, {name: "Services", link: "/services"},
+                  {name: "Contact Us", link: "/contact"}
+                  ]
+
   useEffect(() => {
-    if (window.location.pathname === "/" && Value !== 0) {
-      setValue(0);
-    } else if (window.location.pathname === "/revolution" && Value !== 1) {
-      setValue(1);
-    } else if (window.location.pathname === "/about" && Value !== 2) {
-      setValue(2);
-    } else if (window.location.pathname === "/services" && Value !== 3) {
-      setValue(3);
-    } else if (window.location.pathname === "/contact" && Value !== 4) {
-      setValue(4);
-    } else if (window.location.pathname === "/estimate" && Value !== 5) {
-      setValue(5);
-    }
+    // if (window.location.pathname === "/" && Value !== 0) {
+    //   setValue(0);
+    // } else if (window.location.pathname === "/revolution" && Value !== 1) {
+    //   setValue(1);
+    // } else if (window.location.pathname === "/about" && Value !== 2) {
+    //   setValue(2);
+    // } else if (window.location.pathname === "/services" && Value !== 3) {
+    //   setValue(3);
+    // } else if (window.location.pathname === "/contact" && Value !== 4) {
+    //   setValue(4);
+    // } else if (window.location.pathname === "/estimate" && Value !== 5) {
+    //   setValue(5);
+    // }
 
     switch (window.location.pathname) {
       case "/":
@@ -303,6 +311,7 @@ const Header = () => {
                     onOpen={() => setOpenDrawer(true)} 
                     classes={{paper: classes.drawer}}
         >
+            <div className={classes.toolbarMargin} />
                         <List disablePadding>
                         <ListItem divider component={Link} to="/" 
                                   onClick={()=> {setOpenDrawer(false); setValue(0)}}
@@ -352,7 +361,7 @@ const Header = () => {
   return (
     <React.Fragment>
       <ElevationScroll>
-        <AppBar position="fixed" color="primary">
+        <AppBar position="fixed" color="primary" className={classes.appbar}>
           <Toolbar disableGutters>
             <Button
               component={Link}
